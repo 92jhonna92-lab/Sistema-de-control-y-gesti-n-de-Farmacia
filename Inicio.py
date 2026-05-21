@@ -1,8 +1,9 @@
 
 print("----SISTEMA DE CONTROL Y GESTION DE UNA FARMACIA----")
 print("----------------------------------------------------")
-usuarios={}
-inventario=[]
+usuarios={} ##Usaremos este array para guardar los usuarios
+inventario=[] ##Usaremos esta lista para el los productos
+ventas=[] ##Usaremos esta lista para registrar las ventas
 ##Funciones para la pantalla de Login-------------------
 ##Funcion de registrar
 def registrar():
@@ -27,7 +28,7 @@ def login():
 
 ##Funcion Agregar producots
 def agregar_producto():
-    print("Agregar Producto")
+    print("-------Agregar Producto--------")
     nombre=input("Ingrese nombre del producto: ")
     precio=float(input("Ingrese precio del producto: "))
     stock=int(input("Ingrese stock del producto: "))
@@ -51,10 +52,11 @@ def ver_inventario():
 
 ##Funcion Modificar productos
 def modificar_producto():
+    print("===Modificar Productos===")
     ver_inventario()
     if len(inventario)==0:
         return
-    indice=int(input("Ingrese ID del producto a modificar: "))
+    indice=int(input("Ingrese ID del producto a modificar: "))-1##con este (-1) cambio la posicion a una anterior y tomo en cuenta la posicion 0
     if indice>=0 and indice<len(inventario):
         print("Ingrese los nuevos datos: ")
         new_nombre=input("Nuevo nombre del producto: ")
@@ -69,18 +71,84 @@ def modificar_producto():
 
 ##Funcion Eliminar Producto
 def eliminar_producto():
+    print("===Eliminar Productos===")
     ver_inventario()
     if len(inventario)==0:
         return
-    indice=int(input("Ingrese ID del producto a Eliminar"))
+    indice=int(input("Ingrese ID del producto a Eliminar"))-1 ##con este (-1) cambio la posicion a una anterior y tomo en cuenta la posicion 0
     if indice>=0 and indice<len(inventario):
         producto_eliminado=inventario.pop(indice) ## .pop para eliminar de la lista(aca se pone la posicion)
         print(f"Producto Eliminado: {producto_eliminado}")
     else:
         print("Producto no Valido")
 
+##Funcion Registrar Ventas
+def registrar_venta():
+    print("======Registrar Venta======")
+    print("===========================")
+    ver_inventario()
+    if len(inventario)==0:
+        return
+    indice=int(input("Ingrese la ID del producto"))
+    if indice>=0 and indice<len(inventario):
+        producto=inventario[indice]
+        cantidad=int(input("Cantidad a vender: "))
+        if cantidad<=0:
+            print("Cantidad Invalida")
+        elif cantidad>producto["stock"]:
+            print("Stock insuficiente")
+            return
+        total=cantidad*producto["precio"]
+
+        producto["stock"]-=cantidad ##Descontar Stock
+
+        venta={"producto":producto["nombre"], "cantidad":cantidad, "total":total}
+
+        ventas.append(venta) ##con append cuardamos la "Venta" en la lista de Ventas que añadimos al inicio
+
+        print("Venta realizada Exitosamente")
+        print(f"Producto: {producto['nombre']} - Cantidad: {cantidad} - Total: Bs. {total}")
+    else:
+        print("ID no valido")
+
+##Funcion para ver las ventas
+def ver_ventas():
+    print("======Historial Ventas======")
+    print("============================")
+
+    if len(ventas)==0:
+        print("No hay ventas registradas")
+        return
+    total_general=0
+
+    for i, venta in enumerate(ventas):
+        print(f"Venta{i} - Producto: {venta['producto']} - Cantidad: {venta['cantidad']} - Total: {venta['total']}")
+        total_general+=venta["total"]
+
+    print(f"Total Vendido: Bs. {total_general}")
+
+
 
 ##Menus---------------------------------
+
+##Menu Ventas
+def menu_ventas():
+    while True:
+        print("-----SISTEMA  FARMACIA-----")
+        print("------Menu Ventas-----")
+        print("1.Registrar Ventas")
+        print("2.Ver ventas")
+        print("3.Atras")
+        opV=input("Seleccione una opcion")
+        if opV=="1":
+            registrar_venta()
+        elif opV=="2":
+            ver_ventas()
+        elif opV=="3":
+            print("Saliendo...")
+            break
+        else:
+            print("Opcion invalida")
 
 ##Menu de Inventario
 def menu_inventario():
@@ -110,15 +178,16 @@ def menu_inventario():
 ##Funcion Menu principal
 def menu_principal(usuario):
     while True:
-        print("\n---------Sistema FARMACIA--------")
-        print("1. Inventario")
+        print("\n---------Sistema FARMACIA-----------")
+        print("============Menu Principal============")
+        print("1.Inventario")
         print("2.Ventas")
         print("3.Cerrar")
         opMP=input("Seleccione una opcion: ")
         if opMP=="1":
             menu_inventario()
         elif opMP=="2":
-            print("Aqui se registraran las ventas")
+            menu_ventas()
         elif opMP=="3":
             print("Cerrando Sesion...")
             break
@@ -134,17 +203,18 @@ def menu_principal(usuario):
 
 while True:
     print("-------------LOGIN-----------")
+    print("=============================")
     print("Seleccione opcion con numero:")
     print("1.Iniciar Sesion")
     print("2.Registrarse")
-    print("3.Cerrar Sesion")
+    print("3.Salir")
     op=input("Ingrese opcion deseada(1,2,3):")
     if op=="2":
         registrar()
     elif op=="1":
         login()
     elif op=="3":
-        print("Cesion cerrada.!")
+        print("Saliendoo...")
         break
     else:
         print("Opcion invalida, intente nuevamente")
