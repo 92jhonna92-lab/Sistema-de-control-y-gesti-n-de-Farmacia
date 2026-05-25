@@ -4,6 +4,7 @@ print("----------------------------------------------------")
 usuarios={} ##Usaremos este array para guardar los usuarios
 inventario=[] ##Usaremos esta lista para el los productos
 ventas=[] ##Usaremos esta lista para registrar las ventas
+
 ##Funciones para la pantalla de Login-------------------
 ##Funcion de registrar
 def registrar():
@@ -29,7 +30,8 @@ def login():
 ##Funcion Agregar producots
 def agregar_producto():
     print("-------Agregar Producto--------")
-    nombre=input("Ingrese nombre del producto: ")
+    nom=input("Ingrese nombre del producto: ")
+    nombre=nom.upper()
     precio=float(input("Ingrese precio del producto: "))
     stock=int(input("Ingrese stock del producto: "))
     producto={
@@ -59,7 +61,8 @@ def modificar_producto():
     indice=int(input("Ingrese ID del producto a modificar: "))-1##con este (-1) cambio la posicion a una anterior y tomo en cuenta la posicion 0
     if indice>=0 and indice<len(inventario):
         print("Ingrese los nuevos datos: ")
-        new_nombre=input("Nuevo nombre del producto: ")
+        new_nom=input("Nuevo nombre del producto: ")
+        new_nombre=new_nom.upper()
         new_precio=float(input("Nuevo precio del producto: "))
         new_stock=int(input("Nuevo stock del producto: "))
         inventario[indice]["nombre"]= new_nombre
@@ -75,7 +78,7 @@ def eliminar_producto():
     ver_inventario()
     if len(inventario)==0:
         return
-    indice=int(input("Ingrese ID del producto a Eliminar"))-1 ##con este (-1) cambio la posicion a una anterior y tomo en cuenta la posicion 0
+    indice=int(input("Ingrese ID del producto a Eliminar: "))-1 ##con este (-1) cambio la posicion a una anterior y tomo en cuenta la posicion 0
     if indice>=0 and indice<len(inventario):
         producto_eliminado=inventario.pop(indice) ## .pop para eliminar de la lista(aca se pone la posicion)
         print(f"Producto Eliminado: {producto_eliminado}")
@@ -89,7 +92,7 @@ def registrar_venta():
     ver_inventario()
     if len(inventario)==0:
         return
-    indice=int(input("Ingrese la ID del producto"))
+    indice=int(input("Ingrese la ID del producto: "))-1 ##con este (-1) cambio la posicion a una anterior y tomo en cuenta la posicion 0
     if indice>=0 and indice<len(inventario):
         producto=inventario[indice]
         cantidad=int(input("Cantidad a vender: "))
@@ -122,7 +125,7 @@ def ver_ventas():
     total_general=0
 
     for i, venta in enumerate(ventas):
-        print(f"Venta{i} - Producto: {venta['producto']} - Cantidad: {venta['cantidad']} - Total: {venta['total']}")
+        print(f"Venta{i+1} - Producto: {venta['producto']} - Cantidad: {venta['cantidad']} - Total: {venta['total']}")
         total_general+=venta["total"]
 
     print(f"Total Vendido: Bs. {total_general}")
@@ -139,7 +142,7 @@ def menu_ventas():
         print("1.Registrar Ventas")
         print("2.Ver ventas")
         print("3.Atras")
-        opV=input("Seleccione una opcion")
+        opV=input("Seleccione una opcion: ")
         if opV=="1":
             registrar_venta()
         elif opV=="2":
