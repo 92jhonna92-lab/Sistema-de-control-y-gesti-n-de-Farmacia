@@ -10,10 +10,19 @@ ventas=[] ##Usaremos esta lista para registrar las ventas
 def registrar():
     print("--------Registro--------")
     usuario=input("Ingrese un nuevo usuario: ")
+    if len(usuario)>=8:
+        print("Usuario guardado")
+    else:
+        print("Usuario invalido minimo 8 caracteres")
+        return 
     if usuario in usuarios:
         print("El usuario ya existe")
         return
     password=input("Ingrese contraseña: ")
+    if len(password)>=8:
+        print("Contraseña guardada")
+    else:
+        print("Contraseña insegura")
     usuarios[usuario]=password
     print("Usuario registrado correctamente!")
 ##Funcion de login
