@@ -1,0 +1,91 @@
+def registrar_venta():
+    print("======Registrar Venta======")
+    print("===========================")
+
+    nombre_cliente=input("Nombre o Razon Social: ")
+    nit_cliente=int(input("NIT/CI:"))
+
+    ##Variable y lista para registrar la facura y el total
+    lista_factura=[]
+    total_general=0
+
+    if len(inventario)==0:
+        print("No hay productos en el inventario") 
+        return
+    
+
+    while True: ##Vamos a usar un while para que entre en un bucle de ventas hasta que el ID este en blanco/presione enter
+        ver_inventario()
+        entrada=input("Ingrese la ID del producto: (Enter para finalizar) ") ##Si presiona enter se finaliza la venta
+        if entrada== "":
+            break
+        indice=int(entrada)-1
+
+        if indice>=0 and indice<len(inventario):
+
+            producto=inventario[indice]
+            cantidad=int(input("Cantidad a vender: "))
+            if cantidad<=0:
+                print("Cantidad Invalida")
+                continue
+            elif cantidad>producto["stock"]:
+                print("Stock insuficiente")
+                continue
+            total=cantidad*producto["precio"]
+            producto["stock"]-=cantidad ##Descontar Stock
+            venta={"producto":producto["nombre"], "cantidad":cantidad, "total":total}
+            ventas.append(venta) ##con append cuardamos la "Venta" en la lista de Ventas que añadimos al inicio
+            total_general+=total
+            print("Venta realizada Exitosamente")
+            print(f"Producto: {producto['nombre']} - Cantidad: {cantidad} - Total: Bs. {total}")
+        else:
+            print("ID no valido")
+
+    ##Dibujamos La Factura
+
+    print("\n===================================")
+    print("          FARMACIA    ")
+    print("===================================")
+    print(f"Cliente: {nombre_cliente}")
+    print(f"NIT/CI : {nit_cliente}")
+    print("===================================")
+    print("Producto      Cant   Subtotal")
+
+    for item in lista_factura:
+        print(
+            f"{item['producto']:<12} "
+            f"{item['cantidad']:<5} "
+            f"Bs.{item['subtotal']}"
+            )
+    print("===================================")
+    print(f"TOTAL: Bs.{total_general}")
+    print("===================================")
+    ##Vamos a guardar esta factura en una array(usamos array porque tenemos definido lo que usaremos)
+    factura={"cliente": nombre_cliente, "nit":nit_cliente, "items":lista_factura,"total":total_general}
+    facturas.append(factura) ##aca guardamos con el .append el array de arriba en la lista de facturas
+
+
+def ver_facturas():
+    print("===Historial Facturas===")
+    if len(facturas)==0:
+        print("No hay facturas registradas")
+        return
+    for i, factura in enumerate(facturas):
+        print(f"Id:{i+1} - Nombre/Razon Social: {factura['cliente']} - NIT/CI: {factura['nit']} - Items: {factura['items']} - Total General: {factura['total']}")
+        print("==================================================================")
+
+##Funcion para ver las ventas
+def ver_ventas():
+    print("======Historial Ventas======")
+    print("============================")
+
+    if len(ventas)==0:
+        print("No hay ventas registradas")
+        return
+    total_general=0
+
+    for i, venta in enumerate(ventas):
+        print(f"Venta{i+1} - Producto: {venta['producto']} - Cantidad: {venta['cantidad']} - Total: {venta['total']}")
+        total_general+=venta["total"]
+
+    print(f"Total Vendido: Bs. {total_general}")
