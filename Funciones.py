@@ -92,34 +92,45 @@ def eliminar_producto():
     else:
         print("Producto no Valido")
 
+
 ##Funcion Registrar Ventas
 def registrar_venta():
     print("======Registrar Venta======")
     print("===========================")
-    ver_inventario()
+    
     if len(inventario)==0:
+        print("No hay productos en el inventario") 
         return
-    indice=int(input("Ingrese la ID del producto: "))-1 ##con este (-1) cambio la posicion a una anterior y tomo en cuenta la posicion 0
-    if indice>=0 and indice<len(inventario):
-        producto=inventario[indice]
-        cantidad=int(input("Cantidad a vender: "))
-        if cantidad<=0:
-            print("Cantidad Invalida")
-        elif cantidad>producto["stock"]:
-            print("Stock insuficiente")
-            return
-        total=cantidad*producto["precio"]
+    total_general=0
 
-        producto["stock"]-=cantidad ##Descontar Stock
+    while True: ##Vamos a usar un while para que entre en un bucle de ventas hasta que el ID este en blanco/presione enter
+        ver_inventario()
+        entrada=input("Ingrese la ID del producto: (Enter para finalizar) ") ##Si presiona enter se finaliza la venta
+        if entrada== "":
+            break
+        indice=int(entrada)-1
 
-        venta={"producto":producto["nombre"], "cantidad":cantidad, "total":total}
+        if indice>=0 and indice<len(inventario):
 
-        ventas.append(venta) ##con append cuardamos la "Venta" en la lista de Ventas que añadimos al inicio
-
-        print("Venta realizada Exitosamente")
-        print(f"Producto: {producto['nombre']} - Cantidad: {cantidad} - Total: Bs. {total}")
-    else:
-        print("ID no valido")
+            producto=inventario[indice]
+            cantidad=int(input("Cantidad a vender: "))
+            if cantidad<=0:
+                print("Cantidad Invalida")
+                continue
+            elif cantidad>producto["stock"]:
+                print("Stock insuficiente")
+                continue
+            total=cantidad*producto["precio"]
+            producto["stock"]-=cantidad ##Descontar Stock
+            venta={"producto":producto["nombre"], "cantidad":cantidad, "total":total}
+            ventas.append(venta) ##con append cuardamos la "Venta" en la lista de Ventas que añadimos al inicio
+            total_general+=total
+            print("Venta realizada Exitosamente")
+            print(f"Producto: {producto['nombre']} - Cantidad: {cantidad} - Total: Bs. {total}")
+        else:
+            print("ID no valido")
+    print("======Resumen de Venta=======")
+    print(f"Total Vendido: Bs. {total_general}")
 
 ##Funcion para ver las ventas
 def ver_ventas():
