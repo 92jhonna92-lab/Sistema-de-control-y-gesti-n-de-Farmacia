@@ -88,7 +88,9 @@ while True:
     if op=="2":
         Funciones.registrar()
     elif op=="1":
-        Funciones.login()
+        usuario=Funciones.login() ##
+        if usuario!=False:
+            menu_principal(usuario)
     elif op=="3":
         print("Saliendoo...")
         break

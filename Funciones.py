@@ -2,7 +2,7 @@ usuarios={} ##Usaremos este array para guardar los usuarios
 inventario=[] ##Usaremos esta lista para el los productos
 ventas=[] ##Usaremos esta lista para registrar las ventas
 
-import Inicio
+##import Inicio
 ##Funciones para la pantalla de Login-------------------
 ##Funcion de registrar
 def registrar():
@@ -30,17 +30,41 @@ def login():
     password=input("Contraseña: ")
     if usuario in usuarios and usuarios[usuario]==password:
         print(f"\n Bienvenido {usuario}")
-        Inicio.menu_principal(usuario)
+        
+        return usuario ##devolvemos usuario
+    
+        ##Inicio.menu_principal(usuario) ##aCA Estaba mezclando
     else:
         print("Usuario o contraseña incorrecta, revise!")
+        return False ##devuelvo false
 
         ##Funcion Agregar producots
 def agregar_producto():
     print("-------Agregar Producto--------")
     nom=input("Ingrese nombre del producto: ")
     nombre=nom.upper()
-    precio=float(input("Ingrese precio del producto: "))
-    stock=int(input("Ingrese stock del producto: "))
+    while True: ##Validamos el precio de float
+        try:
+            precio=float(input("Ingrese precio del producto: "))
+            if precio<=0:
+                print("El precio debe ser mayor a 0")
+                continue
+
+            break
+
+        except ValueError:
+            print("No se permiten letras en el precio")
+
+    while True:
+        try:
+            stock=int(input("Ingrese stock del producto: "))
+            if stock<0:
+                print("El stock no debe ser negativo")
+                continue
+            break
+        except ValueError:
+            print("No se permiten letras en el stock")
+
     producto={
         "nombre":nombre,
         "precio":precio,
@@ -65,19 +89,40 @@ def modificar_producto():
     ver_inventario()
     if len(inventario)==0:
         return
-    indice=int(input("Ingrese ID del producto a modificar: "))-1##con este (-1) cambio la posicion a una anterior y tomo en cuenta la posicion 0
-    if indice>=0 and indice<len(inventario):
-        print("Ingrese los nuevos datos: ")
-        new_nom=input("Nuevo nombre del producto: ")
-        new_nombre=new_nom.upper()
-        new_precio=float(input("Nuevo precio del producto: "))
-        new_stock=int(input("Nuevo stock del producto: "))
-        inventario[indice]["nombre"]= new_nombre
-        inventario[indice]["precio"]=new_precio
-        inventario[indice]["stock"]=new_stock
-        print("Producto modificado correctamente!")
-    else:
-        print("Producto no valido")
+    try:
+        indice=int(input("Ingrese ID del producto a modificar: "))-1##con este (-1) cambio la posicion a una anterior y tomo en cuenta la posicion 0
+        
+        if indice<0 or indice>=len(inventario):
+            print("ID no Valido ")
+            return
+    except ValueError:
+        print("El ID debe ser un numero")
+        return
+    new_nom=input("Nuevo nombre del producto: ")
+    new_nombre=new_nom.upper()
+    while True: ##Validamos que no se pueda escribir letras en los precios-----
+        try:
+            new_precio=float(input("Nuevo precio del producto: "))
+            if new_precio<=0:
+                print("El precio debe ser mayor a 0")
+                continue
+            break
+        except ValueError:
+            print("No se permiten letras en el precio")
+    while True:
+        try:
+            new_stock=int(input("Nuevo stock del producto: "))
+            if new_stock<0:
+                print("El stock no puede ser negativo")
+                continue
+            break
+        except ValueError:
+            print("No se permiten letras en el stock")
+
+    inventario[indice]["nombre"]= new_nombre
+    inventario[indice]["precio"]=new_precio
+    inventario[indice]["stock"]=new_stock
+    print("Producto modificado correctamente!")
 
 ##Funcion Eliminar Producto
 def eliminar_producto():
