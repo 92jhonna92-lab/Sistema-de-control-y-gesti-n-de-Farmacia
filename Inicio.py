@@ -14,13 +14,16 @@ def menu_ventas():
         print("------Menu Ventas-----")
         print("1.Registrar Ventas")
         print("2.Ver ventas")
-        print("3.Atras")
+        print("3.Ver Facturas")
+        print("4.Atras")
         opV=input("Seleccione una opcion: ")
         if opV=="1":
             Funciones.registrar_venta()
         elif opV=="2":
             Funciones.ver_ventas()
         elif opV=="3":
+            Funciones.ver_facturas()
+        elif opV=="4":
             print("Saliendo...")
             break
         else:
